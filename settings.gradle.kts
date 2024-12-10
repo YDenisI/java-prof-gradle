@@ -1,6 +1,7 @@
 rootProject.name = "gradle"
 
 include("hw01-gradle")
+include("hw03-generics")
 
 pluginManagement {
     val jgitver: String by settings
@@ -24,8 +25,4 @@ pluginManagement {
         kotlin("jvm") version "2.0.21"
     }
 }
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
-}
-include("hw01-gradle")
 
