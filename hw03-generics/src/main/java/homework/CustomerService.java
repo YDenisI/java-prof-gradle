@@ -22,16 +22,14 @@ public class CustomerService {
     }
 
     public Map.Entry<Customer, String> getNext(Customer customer) {
-        boolean found = false;
 
-        for (Map.Entry<Customer, String> entry : navMap.entrySet()) {
-            if (found) {
-                return entry;
-            }
-            if (entry.getKey().equals(customer)) {
-                found = true;
-            }
-        }
-        return navMap.tailMap(new Customer(0, "", customer.getScores()), false).firstEntry();
+        Map.Entry<Customer, String> maxEntry = navMap.higherEntry(customer);
+        if (maxEntry == null) return maxEntry;
+
+        Customer copy = new Customer(
+                maxEntry.getKey().getId(),
+                maxEntry.getKey().getName(),
+                maxEntry.getKey().getScores());
+        return new AbstractMap.SimpleEntry<>(copy, maxEntry.getValue());
     }
 }
