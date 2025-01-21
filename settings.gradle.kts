@@ -3,6 +3,7 @@ rootProject.name = "gradle"
 include("hw01-gradle")
 include("hw03-generics")
 include("hw06-annotations")
+include("hw08-gc:homework")
 
 pluginManagement {
     val jgitver: String by settings
@@ -26,4 +27,3 @@ pluginManagement {
         kotlin("jvm") version "2.0.21"
     }
 }
-include("hw06-annotations")
