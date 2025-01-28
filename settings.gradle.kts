@@ -24,6 +24,5 @@ pluginManagement {
         id("com.google.protobuf") version protobufVer
         id("name.remal.sonarlint") version sonarlint
         id("com.diffplug.spotless") version spotless
-        kotlin("jvm") version "2.0.21"
     }
 }
