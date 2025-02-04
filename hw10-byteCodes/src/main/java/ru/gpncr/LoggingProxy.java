@@ -3,35 +3,43 @@ package ru.gpncr;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressWarnings({"java:S2629"})
-public class LoggingProxy {
+@SuppressWarnings({"java:S2629", "java:S3457"})
+public class LoggingProxy implements InvocationHandler {
     private static final Logger log = LoggerFactory.getLogger(LoggingProxy.class);
+    private final Object target;
+    private final Map<String, Method> loggableMethods = new HashMap<>();
 
-    private LoggingProxy() {}
-
-    static TestLoggingInterface createTestClass() {
-        InvocationHandler handler = new TestInvocationHandler(new TestLogging());
-        return (TestLoggingInterface) Proxy.newProxyInstance(
-                LoggingProxy.class.getClassLoader(), new Class<?>[] {TestLoggingInterface.class}, handler);
+    public LoggingProxy(Object target) {
+        this.target = target;
+        loggableMethods(target);
     }
 
-    static class TestInvocationHandler implements InvocationHandler {
-        private final TestLoggingInterface testClass;
-
-        TestInvocationHandler(TestLoggingInterface testClass) {
-            this.testClass = testClass;
-        }
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            Method originalMethod = testClass.getClass().getMethod(method.getName(), method.getParameterTypes());
-            if (originalMethod.isAnnotationPresent(Log.class)) {
-                log.info("executed method: {}, param: {}", method.getName(), java.util.Arrays.toString(args));
+    private void loggableMethods(Object target) {
+        Method[] methods = target.getClass().getMethods();
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(Log.class)) {
+                loggableMethods.put(method.getName(), method);
             }
-            return method.invoke(testClass, args);
         }
+    }
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        Method originalMethod = loggableMethods.get(method.getName());
+        if (originalMethod != null) {
+            log.info("executed method: {}, param: {}", method.getName(), Arrays.toString(args));
+        }
+        return method.invoke(target, args);
+    }
+
+    public static <T> T createProxy(T target) {
+        return (T) Proxy.newProxyInstance(
+                target.getClass().getClassLoader(), target.getClass().getInterfaces(), new LoggingProxy(target));
     }
 }
