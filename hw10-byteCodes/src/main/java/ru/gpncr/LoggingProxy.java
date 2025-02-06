@@ -24,14 +24,16 @@ public class LoggingProxy implements InvocationHandler {
         Method[] methods = target.getClass().getMethods();
         for (Method method : methods) {
             if (method.isAnnotationPresent(Log.class)) {
-                loggableMethods.put(method.getName(), method);
+                String key = method.getName() + Arrays.toString(method.getParameterTypes());
+                loggableMethods.put(key, method);
             }
         }
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        Method originalMethod = loggableMethods.get(method.getName());
+        String key = method.getName() + Arrays.toString(method.getParameterTypes());
+        Method originalMethod = loggableMethods.get(key);
         if (originalMethod != null) {
             log.info("executed method: {}, param: {}", method.getName(), Arrays.toString(args));
         }
