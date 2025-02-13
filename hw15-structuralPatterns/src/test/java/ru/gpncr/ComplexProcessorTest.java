@@ -13,6 +13,7 @@ import ru.gpncr.listener.Listener;
 import ru.gpncr.model.Message;
 import ru.gpncr.processor.Processor;
 
+@SuppressWarnings("java:S1611")
 class ComplexProcessorTest {
 
     @Test

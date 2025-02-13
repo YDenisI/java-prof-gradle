@@ -11,6 +11,7 @@ import ru.gpncr.model.Message;
 import ru.gpncr.model.ObjectForMessage;
 import ru.gpncr.processor.ProcessorThrowExceptionOnEvenSecond;
 
+@SuppressWarnings("java:S5778")
 class ProcessorThrowExceptionOnEvenSecondTest {
 
     private ProcessorThrowExceptionOnEvenSecond processor;
