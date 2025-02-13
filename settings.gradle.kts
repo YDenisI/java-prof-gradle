@@ -28,3 +28,4 @@ pluginManagement {
     }
 }
 include("hw10-byteCodes")
+include("hw15-structuralPatterns")
