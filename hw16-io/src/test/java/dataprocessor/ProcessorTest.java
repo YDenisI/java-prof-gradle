@@ -1,7 +1,6 @@
 package dataprocessor;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+@SuppressWarnings({"java:S1854", "java:S1481", "java:S1128"})
 class ProcessorTest {
     @Test
     @DisplayName("Из файла читается json, обрабатывается, результат сериализуется в строку")
