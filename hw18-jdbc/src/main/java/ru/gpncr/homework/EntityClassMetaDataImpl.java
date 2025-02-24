@@ -62,6 +62,6 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
 
     @Override
     public List<Field> getFieldsWithoutId() {
-        return allFields;
+        return fieldsWithoutId;
     }
 }
