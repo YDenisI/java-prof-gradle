@@ -57,7 +57,7 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
 
     @Override
     public List<Field> getAllFields() {
-        return Arrays.asList(clazz.getDeclaredFields());
+        return allFields;
     }
 
     @Override
