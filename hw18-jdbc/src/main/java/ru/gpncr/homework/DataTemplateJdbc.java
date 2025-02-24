@@ -2,9 +2,11 @@ package ru.gpncr.homework;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import ru.gpncr.core.repository.DataTemplate;
+import ru.gpncr.core.repository.DataTemplateException;
 import ru.gpncr.core.repository.executor.DbExecutor;
 
 /**
@@ -28,24 +30,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
     public Optional<T> findById(Connection connection, long id) {
         String sql = entitySQLMetaData.getSelectByIdSql();
         return dbExecutor
-                .executeSelect(connection, sql, List.of(id), resultSet -> {
-                    try {
-                        if (resultSet.next()) {
-                            T instance = (T) entityClassMetaData
-                                    .getConstructor()
-                                    .newInstance();
-                            for (Field field : entityClassMetaData.getAllFields()) {
-                                field.setAccessible(true);
-                                Object value = resultSet.getObject(field.getName());
-                                field.set(instance, value);
-                            }
-                            return instance;
-                        }
-                    } catch (SQLException | ReflectiveOperationException e) {
-                        throw new RuntimeException(e);
-                    }
-                    return null;
-                })
+                .executeSelect(connection, sql, List.of(id), resultSet -> mapRowToEntity(resultSet))
                 .map(Optional::of)
                 .orElse(Optional.empty());
     }
@@ -56,20 +41,12 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
         return dbExecutor
                 .executeSelect(connection, sql, Collections.emptyList(), resultSet -> {
                     List<T> resultList = new ArrayList<>();
-                    List<Field> fields = entityClassMetaData.getAllFields();
                     try {
                         while (resultSet.next()) {
-                            T instance = (T) entityClassMetaData
-                                    .getConstructor()
-                                    .newInstance();
-                            for (Field field : fields) {
-                                field.setAccessible(true);
-                                Object value = resultSet.getObject(field.getName());
-                                field.set(instance, value);
-                            }
+                            T instance = mapRowToEntity(resultSet);
                             resultList.add(instance);
                         }
-                    } catch (SQLException | ReflectiveOperationException e) {
+                    } catch (SQLException | DataTemplateException e) {
                         throw new RuntimeException(e);
                     }
                     return resultList;
@@ -93,7 +70,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
 
     private List<Object> getValueFields(T client) {
         List<Object> params = new ArrayList<>();
-        List<Field> fields = entityClassMetaData.getFieldsWithoutId();
+        List<Field> fields = entityClassMetaData.getAllFields();
         for (Field field : fields) {
             field.setAccessible(true);
             try {
@@ -104,5 +81,22 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
             }
         }
         return params;
+    }
+
+    private T mapRowToEntity(ResultSet resultSet) {
+        try {
+            if (resultSet.next()) {
+                T instance = (T) entityClassMetaData.getConstructor().newInstance();
+                for (Field field : entityClassMetaData.getAllFields()) {
+                    field.setAccessible(true);
+                    Object value = resultSet.getObject(field.getName());
+                    field.set(instance, value);
+                }
+                return instance;
+            }
+        } catch (SQLException | ReflectiveOperationException | DataTemplateException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }
