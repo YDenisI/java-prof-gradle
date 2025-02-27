@@ -12,7 +12,7 @@ import ru.gpncr.core.repository.executor.DbExecutor;
 /**
  * Сохратяет объект в базу, читает объект из базы
  */
-@SuppressWarnings({"java:S3011", "java:S112"})
+@SuppressWarnings({"java:S3011", "java:S112", "java:S1612"})
 public class DataTemplateJdbc<T> implements DataTemplate<T> {
 
     private final DbExecutor dbExecutor;
