@@ -49,9 +49,8 @@ public class EntitySQLMetaDataImpl implements EntitySQLMetaData {
             String tableName = entityClassMetaData.getName().toLowerCase();
             String idFieldName = entityClassMetaData.getIdField().getName();
             List<Field> fieldNames = entityClassMetaData.getAllFields();
-            String setClause = fieldNames.stream()
-                    .map(field -> field.getName() + " = ?")
-                    .collect(Collectors.joining(", "));
+            String setClause =
+                    fieldNames.stream().map(field -> field.getName() + " = ?").collect(Collectors.joining(", "));
             return "UPDATE " + tableName + " SET " + setClause + " WHERE " + idFieldName + " = ?";
         });
     }

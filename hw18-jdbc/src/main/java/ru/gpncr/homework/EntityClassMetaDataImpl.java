@@ -28,16 +28,16 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
 
         this.allFields = Arrays.asList(clazz.getDeclaredFields());
         this.idField = findIdField();
-        this.fieldsWithoutId = allFields.stream()
-                .filter(field -> !field.equals(idField))
-                .collect(Collectors.toList());
+        this.fieldsWithoutId =
+                allFields.stream().filter(field -> !field.equals(idField)).collect(Collectors.toList());
     }
 
     private Field findIdField() {
         return allFields.stream()
                 .filter(field -> field.isAnnotationPresent(Id.class))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No field annotated with @Id found in class: " + clazz.getName()));
+                .orElseThrow(
+                        () -> new RuntimeException("No field annotated with @Id found in class: " + clazz.getName()));
     }
 
     @Override
