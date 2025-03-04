@@ -10,6 +10,7 @@ import ru.gpncr.crm.model.Address;
 import ru.gpncr.crm.model.Client;
 import ru.gpncr.crm.model.Phone;
 
+@SuppressWarnings({"java:S1854", "java:S5786", "java:S5838"})
 @DisplayName("Демо работы с hibernate (с абстракциями) должно ")
 class DbServiceClientTest extends AbstractHibernateTest {
 

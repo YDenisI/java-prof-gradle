@@ -18,7 +18,7 @@ import ru.gpncr.appcontainer.api.AppComponentsContainerConfig;
 import ru.gpncr.config.AppConfig;
 import ru.gpncr.services.*;
 
-@SuppressWarnings({"java:S6204", "java:S1130"})
+@SuppressWarnings({"java:S6204", "java:S1130", "java:S5786"})
 class AppTest {
 
     @DisplayName("Из контекста тремя способами должен корректно доставаться компонент с проставленными полями")

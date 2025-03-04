@@ -23,6 +23,7 @@ import ru.gpncr.crm.model.Address;
 import ru.gpncr.crm.model.Client;
 import ru.gpncr.crm.model.Phone;
 
+@SuppressWarnings({"java:S6204"})
 class HomeworkTest {
 
     private StandardServiceRegistry serviceRegistry;
@@ -33,17 +34,17 @@ class HomeworkTest {
     // Кроме удаления комментирования, тестовый класс менять нельзя
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         makeTestDependencies();
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         sessionFactory.close();
     }
 
     @Test
-    public void testHomeworkRequirementsForTablesCount() {
+    void testHomeworkRequirementsForTablesCount() {
 
         var tables = StreamSupport.stream(metadata.getDatabase().getNamespaces().spliterator(), false)
                 .flatMap(namespace -> namespace.getTables().stream())
@@ -52,7 +53,7 @@ class HomeworkTest {
     }
 
     @Test
-    public void testHomeworkRequirementsForUpdatesCount() {
+    void testHomeworkRequirementsForUpdatesCount() {
         applyCustomSqlStatementLogger(new SqlStatementLogger(true, false, false, 0) {
             @Override
             public void logStatement(String statement) {
@@ -79,7 +80,7 @@ class HomeworkTest {
     }
 
     @Test
-    public void testForHomeworkRequirementsForClientReferences() throws Exception {
+    void testForHomeworkRequirementsForClientReferences() throws Exception {
         var client = new Client(
                 null,
                 "Vasya",
@@ -89,7 +90,7 @@ class HomeworkTest {
     }
 
     @Test
-    public void testForHomeworkRequirementsForClonedClientReferences() throws Exception {
+    void testForHomeworkRequirementsForClonedClientReferences() throws Exception {
         var client = new Client(
                         null,
                         "Vasya",
@@ -99,7 +100,7 @@ class HomeworkTest {
         assertThatClientHasCorrectReferences(client);
     }
 
-    private void assertThatClientHasCorrectReferences(Client client) throws IllegalAccessException {
+    void assertThatClientHasCorrectReferences(Client client) throws IllegalAccessException {
         var hasAddress = false;
         var hasPhones = false;
         for (var field : client.getClass().getDeclaredFields()) {
@@ -119,7 +120,7 @@ class HomeworkTest {
         assertThat(hasAddress && hasPhones).isTrue();
     }
 
-    private void assertThatObjectHasExpectedClientFieldValue(Object object, Client client) {
+    void assertThatObjectHasExpectedClientFieldValue(Object object, Client client) {
         assertThat(object).isNotNull();
         assertThatCode(() -> {
                     for (var field : object.getClass().getDeclaredFields()) {
@@ -133,7 +134,7 @@ class HomeworkTest {
                 .doesNotThrowAnyException();
     }
 
-    private void makeTestDependencies() {
+    void makeTestDependencies() {
         var cfg = new Configuration();
 
         cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
@@ -163,7 +164,7 @@ class HomeworkTest {
         sessionFactory = metadata.getSessionFactoryBuilder().build();
     }
 
-    private void applyCustomSqlStatementLogger(SqlStatementLogger customSqlStatementLogger) {
+    void applyCustomSqlStatementLogger(SqlStatementLogger customSqlStatementLogger) {
         var jdbcServices = serviceRegistry.getService(JdbcServices.class);
         try {
             Field field = jdbcServices.getClass().getDeclaredField("sqlStatementLogger");
