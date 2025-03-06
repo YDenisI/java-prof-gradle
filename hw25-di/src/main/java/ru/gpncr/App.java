@@ -18,6 +18,7 @@ import ru.gpncr.appcontainer.AppComponentsContainerImpl;
 import ru.gpncr.appcontainer.api.AppComponentsContainer;
 import ru.gpncr.config.AppConfig;
 import ru.gpncr.services.GameProcessor;
+import ru.gpncr.services.GameProcessorImpl;
 
 @SuppressWarnings({"java:S125", "java:S1130"})
 public class App {
