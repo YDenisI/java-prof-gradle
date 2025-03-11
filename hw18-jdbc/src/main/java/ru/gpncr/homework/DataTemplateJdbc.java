@@ -70,7 +70,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
 
     private List<Object> getValueFields(T client) {
         List<Object> params = new ArrayList<>();
-        List<Field> fields = entityClassMetaData.getAllFields();
+        List<Field> fields = entityClassMetaData.getFieldsWithoutId();
         for (Field field : fields) {
             field.setAccessible(true);
             try {
