@@ -1,9 +1,7 @@
 package ru.gpncr.cachehw;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
+import ru.gpncr.crm.model.ClientKey;
 
 public class MyCache<K, V> implements HwCache<K, V> {
 
@@ -43,5 +41,21 @@ public class MyCache<K, V> implements HwCache<K, V> {
         for (HwListener<K, V> listener : listeners) {
             listener.notify(key, value, action);
         }
+    }
+
+    public Collection<V> values() {
+        return cache.values();
+    }
+
+    public boolean containsKey(Long clientId) {
+        for (K key : cache.keySet()) {
+            if (key instanceof ClientKey) {
+                ClientKey existingKey = (ClientKey) key;
+                if (existingKey.getClientId().equals(clientId)) {
+                    return true; // Ключ найден
+                }
+            }
+        }
+        return false;
     }
 }

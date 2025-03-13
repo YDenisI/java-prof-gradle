@@ -17,10 +17,10 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
 
     private final DbExecutor dbExecutor;
     private final EntitySQLMetaData entitySQLMetaData;
-    private final EntityClassMetaData<?> entityClassMetaData;
+    private final EntityClassMetaData<T> entityClassMetaData;
 
     public DataTemplateJdbc(
-            DbExecutor dbExecutor, EntitySQLMetaData entitySQLMetaData, EntityClassMetaData<?> entityClassMetaData) {
+            DbExecutor dbExecutor, EntitySQLMetaData entitySQLMetaData, EntityClassMetaData<T> entityClassMetaData) {
         this.dbExecutor = dbExecutor;
         this.entitySQLMetaData = entitySQLMetaData;
         this.entityClassMetaData = entityClassMetaData;
@@ -46,8 +46,8 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
                             T instance = mapRowToEntity(resultSet);
                             resultList.add(instance);
                         }
-                    } catch (SQLException | DataTemplateException e) {
-                        throw new RuntimeException(e);
+                    } catch (SQLException e) {
+                        throw new DataTemplateException(e);
                     }
                     return resultList;
                 })
@@ -70,14 +70,14 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
 
     private List<Object> getValueFields(T client) {
         List<Object> params = new ArrayList<>();
-        List<Field> fields = entityClassMetaData.getAllFields();
+        List<Field> fields = entityClassMetaData.getFieldsWithoutId();
         for (Field field : fields) {
             field.setAccessible(true);
             try {
                 Object value = field.get(client);
                 params.add(value);
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("Error accessing field value", e);
+                throw new DataTemplateException(e);
             }
         }
         return params;
@@ -94,8 +94,8 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
                 }
                 return instance;
             }
-        } catch (SQLException | ReflectiveOperationException | DataTemplateException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | ReflectiveOperationException e) {
+            throw new DataTemplateException(e);
         }
         return null;
     }
