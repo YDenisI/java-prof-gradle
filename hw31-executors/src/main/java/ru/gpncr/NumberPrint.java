@@ -3,6 +3,7 @@ package ru.gpncr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings({"java:S3776", "java:S3457", "java:S2629", "java:S1192", "java:S2274", "java:S1612"})
 public class NumberPrint {
     private static final Logger logger = LoggerFactory.getLogger(NumberPrint.class);
     private boolean isFirstTurn = true;

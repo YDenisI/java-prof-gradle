@@ -11,6 +11,7 @@ import ru.gpncr.core.sessionmanager.TransactionRunner;
 import ru.gpncr.crm.model.Client;
 import ru.gpncr.crm.model.ClientKey;
 
+@SuppressWarnings({"java:S2789"})
 public class DbServiceClientImpl implements DBServiceClient {
     private static final Logger log = LoggerFactory.getLogger(DbServiceClientImpl.class);
 

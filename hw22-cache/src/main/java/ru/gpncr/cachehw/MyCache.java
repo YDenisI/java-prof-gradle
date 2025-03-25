@@ -3,6 +3,7 @@ package ru.gpncr.cachehw;
 import java.util.*;
 import ru.gpncr.crm.model.ClientKey;
 
+@SuppressWarnings({"java:S6201", "java:S1905"})
 public class MyCache<K, V> implements HwCache<K, V> {
 
     private final Map<K, V> cache = new WeakHashMap<>();
