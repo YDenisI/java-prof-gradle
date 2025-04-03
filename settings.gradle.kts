@@ -15,7 +15,6 @@ pluginManagement {
     val protobufVer: String by settings
     val sonarlint: String by settings
     val spotless: String by settings
-
     plugins {
         id("fr.brouillard.oss.gradle.jgitver") version jgitver
         id("io.spring.dependency-management") version dependencyManagement
@@ -31,8 +30,9 @@ include("hw10-byteCodes")
 include("hw15-structuralPatterns")
 include("hw16-io")
 include("hw18-jdbc")
-        include("hw25-di")
+include("hw25-di")
 include("hw21-jpql")
 include("hw22-cache")
 include("hw31-executors")
 include("hw32-concurrentCollections")
+include("hw33-grpc")

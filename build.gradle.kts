@@ -51,6 +51,11 @@ allprojects {
             dependency("org.openjdk.jmh:jmh-generator-annprocess:$jmh")
             dependency("org.glassfish:jakarta.json:$glassfishJson")
             dependency("org.ow2.asm:asm-commons:$asm")
+            dependency("io.grpc:grpc-netty:1.44.1")
+            dependency("io.grpc:grpc-protobuf:1.44.1")
+            dependency("io.grpc:grpc-stub:1.44.1")
+            dependency("com.github.tomakehurst:wiremock:3.0.0-beta-2")
+            dependency("io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE")
 
         }
     }
