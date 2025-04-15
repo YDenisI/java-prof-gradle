@@ -36,9 +36,11 @@ public class NumbersClient {
         stub.generateNumbers(request, new StreamObserver<GenerateResponse>() {
             @Override
             public void onNext(GenerateResponse response) {
-                lastReceivedValue = response.getValue();
-                isNewValueReceived = true;
-                logger.info("new value: {}", lastReceivedValue);
+                synchronized (NumbersClient.this) {
+                    lastReceivedValue = response.getValue();
+                    isNewValueReceived = true;
+                    logger.info("new value: {}", lastReceivedValue);
+                }
             }
 
             @Override
@@ -56,14 +58,14 @@ public class NumbersClient {
                     while (currentValue < 50) {
                         try {
                             Thread.sleep(1000); // Задержка в 1 секунду
-
-                            if (isNewValueReceived) {
-                                currentValue += lastReceivedValue + 1;
-                                isNewValueReceived = false;
-                            } else {
-                                currentValue++;
+                            synchronized (this) {
+                                if (isNewValueReceived) {
+                                    currentValue += lastReceivedValue + 1;
+                                    isNewValueReceived = false;
+                                } else {
+                                    currentValue++;
+                                }
                             }
-
                             logger.info("currentValue: {}", currentValue);
 
                         } catch (InterruptedException e) {
