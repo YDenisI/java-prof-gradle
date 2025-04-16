@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package ru.gpncr.protobuf.generated;
+
+service NumberGenerator {
+  rpc GenerateNumbers(GenerateRequest) returns (stream GenerateResponse);
+}
+
+message GenerateRequest {
+  int32 firstValue = 1;
+  int32 lastValue = 2;
+}
+
+message GenerateResponse {
+  int32 value = 1;
+}
